@@ -8,7 +8,12 @@
     ],
     "paths": {
       "@/*": ["./*"]
-    }
+    },
+    "lib": [
+      "DOM",
+      "DOM.Iterable",
+      "ES2022"
+    ]
   },
   "include": [
     "**/*.ts",
@@ -19,5 +24,11 @@
   ],
   "exclude": [
     "node_modules"
-  ]
+  ],
+  "strict": true,
+  "noImplicitAny": true,
+  "module": "ESNext",
+  "moduleResolution": "Bundler",
+  "skipLibCheck": true,
+  "useDefineForClassFields": true
 }

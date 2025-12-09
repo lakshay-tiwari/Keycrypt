@@ -1,0 +1,85 @@
+"use client";
+import { useState } from "react";
+import { Button } from "@/components/ui/button"
+import {
+  Dialog,
+  DialogClose,
+  DialogContent,
+  DialogDescription,
+  DialogFooter,
+  DialogHeader,
+  DialogTitle,
+  DialogTrigger,
+} from "@/components/ui/dialog"
+import { Input } from "@/components/ui/input"
+import { Label } from "@/components/ui/label"
+import { ShowDecryptedPassword } from "./show-decrypted-password";
+
+export function ShowPasswordDialog() {
+  const [masterPassword, setMasterPassword] = useState("");
+  const [open, setOpen] = useState(false);            
+  const [showDecrypted, setShowDecrypted] = useState(false); 
+
+  return (
+    <>
+      <Dialog open={open} onOpenChange={setOpen}>
+        <DialogTrigger asChild>
+          <Button
+            variant="default"
+            className="cursor-pointer"
+            onClick={() => setOpen(true)}
+          >
+            Show
+          </Button>
+        </DialogTrigger>
+
+        <DialogContent className="sm:max-w-[425px]">
+          <DialogHeader>
+            <DialogTitle>Your Password</DialogTitle>
+            <DialogDescription>
+              Enter Your Master Password to Decrypt
+            </DialogDescription>
+          </DialogHeader>
+
+          <div className="grid gap-4">
+            <div className="grid gap-3">
+              <Label htmlFor="name-1">Master Password</Label>
+              <Input
+                id="name-1"
+                onChange={(e) => setMasterPassword(e.target.value)}
+                name="name"
+                defaultValue=""
+              />
+            </div>
+          </div>
+
+          <DialogFooter>
+            <DialogClose asChild>
+              <Button variant="outline">Cancel</Button>
+            </DialogClose>
+
+            {/* when opening second dialog, close this one */}
+            <Button
+              variant="default"
+              className="cursor-pointer"
+              onClick={() => {
+                setOpen(false);        
+                setShowDecrypted(true); 
+              }}
+            >
+              Show Password
+            </Button>
+          </DialogFooter>
+        </DialogContent>
+      </Dialog>
+
+      {/* Second dialog is rendered at root level, controlled by state */}
+
+      <ShowDecryptedPassword 
+        masterPassword={masterPassword}
+        open={showDecrypted}
+        onOpenChange={setShowDecrypted}
+      />
+    </>
+  );
+}
