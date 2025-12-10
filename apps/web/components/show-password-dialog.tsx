@@ -14,8 +14,9 @@ import {
 import { Input } from "@/components/ui/input"
 import { Label } from "@/components/ui/label"
 import { ShowDecryptedPassword } from "./show-decrypted-password";
+import { PasswordArrType } from "@/lib/types/PasswordArrType";
 
-export function ShowPasswordDialog() {
+export function ShowPasswordDialog({ password, master_key_salt } : { password: PasswordArrType, master_key_salt: string}) {
   const [masterPassword, setMasterPassword] = useState("");
   const [open, setOpen] = useState(false);            
   const [showDecrypted, setShowDecrypted] = useState(false); 
@@ -77,8 +78,10 @@ export function ShowPasswordDialog() {
 
       <ShowDecryptedPassword 
         masterPassword={masterPassword}
+        master_key_salt={master_key_salt}
         open={showDecrypted}
         onOpenChange={setShowDecrypted}
+        password={password}
       />
     </>
   );

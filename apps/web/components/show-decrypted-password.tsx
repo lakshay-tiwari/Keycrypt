@@ -13,15 +13,21 @@ import {
 } from "@/components/ui/dialog";
 import { Input } from "@/components/ui/input";
 import { Label } from "@/components/ui/label";
+import { PasswordArrType } from "@/lib/types/PasswordArrType";
+import { decryptPassword } from "@/lib/crypto-utils";
 
 export function ShowDecryptedPassword({
   masterPassword,
   open,
   onOpenChange,
+  password,
+  master_key_salt
 }: {
   masterPassword: string;
   open: boolean;
   onOpenChange: (open: boolean) => void;
+  password: PasswordArrType,
+  master_key_salt: string
 }) {
   const [decryptedPassword, setDecryptedPassword] = useState("");
   const [isCalculating, setIsCalculating] = useState(false);
@@ -34,9 +40,15 @@ export function ShowDecryptedPassword({
       setDecryptedPassword("");
       setCopied(false);
 
-      const decrypted = decryptPassword(masterPassword);
-      setDecryptedPassword(decrypted);
-      setIsCalculating(false);
+      decryptPassword(password.password_cipher,
+        masterPassword,
+        password.password_iv,
+        master_key_salt
+      ).then((decrypted)=>{
+        console.log(decrypted)
+        setDecryptedPassword(decrypted);
+        setIsCalculating(false);
+      })
     } else {
       // Dialog CLOSED
       setDecryptedPassword("");
@@ -110,9 +122,9 @@ export function ShowDecryptedPassword({
 }
 
 /* example decrypt function */
-function decryptPassword(masterPassword: string): string {
-  return masterPassword ? "my-decrypted-password" : "";
-}
+// function decryptPassword(masterPassword: string): string {
+//   return masterPassword ? "my-decrypted-password" : "";
+// }
 
 /* SVG Icons */
 

@@ -15,21 +15,49 @@ import { Input } from "@/components/ui/input";
 import { Label } from "@/components/ui/label";
 import { Plus } from "lucide-react";
 import { toast } from "sonner"; 
+import { addPasswordToDB } from "@/actions/add-encrypted-password-db";
+import { encryptPassword, verifyMasterPassword } from "@/lib/crypto-utils";
+import { useUserId } from "@/hooks/useUserId";
+import { useRouter } from "next/navigation";
 
-export function AddPasswordDialog() {
+export function AddPasswordDialog({ master_key_salt , master_key_hash } : { master_key_salt: string , master_key_hash: string}) {
   const [open, setOpen] = useState(false);
   const [masterPassword, setMasterPassword] = useState("");
   const [title, setTitle] = useState("");
   const [password, setPassword] = useState("");
+  const { userId , loading } = useUserId();
+  const router = useRouter()
+
+  if (loading){
+    return <div>Loading...</div>
+  }
+
+  if (!loading && userId == null){
+    router.push('/auth/login')
+    return <div>Error...</div>
+  }
 
   async function handleSubmit(e: React.FormEvent) {
     e.preventDefault();
 
     try {
       // simulate API / DB save
-      await new Promise((res) => setTimeout(res, 500));
+      const verifyPassword = await verifyMasterPassword(masterPassword,master_key_hash,master_key_salt);
+      if (!verifyPassword){
+          toast.error("Invalid Master Password")
+          throw new Error('Invalid Password')
+      }
+      const encryptedPassword = await encryptPassword(password,masterPassword,master_key_salt);
+      console.log(encryptedPassword)
+      const data = {
+          userId: userId!,
+          label: title,
+          password_cipher: encryptedPassword.cipherText,
+          password_iv: encryptedPassword.iv
+      }
+      await addPasswordToDB(data)
 
-      toast.success("Password added successfully ✅");
+      toast.success("Password added successfully");
 
       // reset + close
       setMasterPassword("");
@@ -37,7 +65,7 @@ export function AddPasswordDialog() {
       setPassword("");
       setOpen(false);
     } catch (error) {
-      toast.error("Failed to add password ❌");
+      toast.error("Failed to add password");
     }
   }
 
