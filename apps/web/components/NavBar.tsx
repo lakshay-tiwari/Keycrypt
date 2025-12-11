@@ -1,4 +1,6 @@
-export function NavBar() {
+import { AuthButton } from "./AuthButton";
+
+export function NavBar( { isLoggedIn }:{ isLoggedIn: boolean} ) {
   return (
     <nav className="
       w-full
@@ -16,8 +18,7 @@ export function NavBar() {
             KeyCrypt
         </span>
         </div>
-        <button>LogOut</button>
-
+        <AuthButton isLoggedIn={isLoggedIn} />
       </div>
     </nav>
   );

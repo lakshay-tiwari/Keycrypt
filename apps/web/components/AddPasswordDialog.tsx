@@ -1,6 +1,6 @@
 "use client";
 
-import { useState } from "react";
+import { useEffect, useState } from "react";
 import { Button } from "@/components/ui/button";
 import {
   Dialog,
@@ -27,15 +27,21 @@ export function AddPasswordDialog({ master_key_salt , master_key_hash } : { mast
   const [password, setPassword] = useState("");
   const { userId , loading } = useUserId();
   const router = useRouter()
+  
+  useEffect(()=>{
+    if (!loading && userId == null){
+      router.push("/auth/login")
+    }
+  },[loading,userId,router])
+
+  if (!loading && userId == null){ // upper one push it, before pushing it show redirectin...
+    return <div>Redirecting...</div>
+  }
 
   if (loading){
     return <div>Loading...</div>
   }
 
-  if (!loading && userId == null){
-    router.push('/auth/login')
-    return <div>Error...</div>
-  }
 
   async function handleSubmit(e: React.FormEvent) {
     e.preventDefault();
@@ -45,7 +51,7 @@ export function AddPasswordDialog({ master_key_salt , master_key_hash } : { mast
       const verifyPassword = await verifyMasterPassword(masterPassword,master_key_hash,master_key_salt);
       if (!verifyPassword){
           toast.error("Invalid Master Password")
-          throw new Error('Invalid Password')
+          return;
       }
       const encryptedPassword = await encryptPassword(password,masterPassword,master_key_salt);
       console.log(encryptedPassword)
