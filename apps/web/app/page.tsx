@@ -1,6 +1,9 @@
+import { Hero } from "@/components/Hero";
+import { NavBar } from "@/components/NavBar";
 
 export default async function Home() {
-  return <div className="bg-slate-400">
-    Hi there
+  return <div>
+    <NavBar />
+    <Hero />
   </div>
 }

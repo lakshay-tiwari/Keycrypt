@@ -11,8 +11,13 @@ export function NavBar() {
       h-16
     ">
       <div className="w-full max-w-5xl mx-auto flex justify-between px-10">
-        <div className="font-bold text-2xl">KeyCrypt</div>
+        <div className="font-bold cursor-pointer text-3xl flex">
+        <span className="bg-linear-to-r text-3xl font-bold from-blue-700 to-cyan-500 bg-clip-text text-transparent">
+            KeyCrypt
+        </span>
+        </div>
         <button>LogOut</button>
+
       </div>
     </nav>
   );
