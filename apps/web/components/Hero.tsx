@@ -4,13 +4,14 @@ import { useRouter } from "next/navigation"
 
 export function Hero(){
     const router = useRouter();
-    
+
     function navigateToDashboard(){
         router.push('/dashboard')
     }
 
     return (
-        <div className="w-full flex justify-center mt-32 sm:mt-40 px-4">
+        <div className="w-full flex justify-center px-4 
+                        mt-52 sm:mt-44 md:mt-40 lg:mt-32">
             <div className="text-center max-w-2xl">
 
                 <h1 className="font-semibold font-serif text-blue-900 leading-tight
@@ -23,7 +24,7 @@ export function Hero(){
                               text-3xl sm:text-4xl md:text-5xl max-[360px]:text-2xl">
                     <span>Again with</span>
 
-                    <span className="animate-fade-in font-bold bg-clip-text text-transparent
+                    <span className="animate-fade-in font-bold bg-clip-text text-transparent 
                                      bg-linear-to-r from-blue-700 to-cyan-500">
                         KeyCrypt
                     </span>
