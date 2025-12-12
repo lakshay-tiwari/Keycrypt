@@ -1,6 +1,7 @@
 "use server"
 
 import { prisma } from "@repo/db/client"
+import { revalidatePath } from "next/cache";
 
 type UUID = string
 
@@ -10,7 +11,7 @@ export const putUsersHashedPass = async (user_id: UUID ,master_key_hash: string,
             where: { user_id }
         });
         if (checkPresent != null) {
-            return { message: "Already present" , status: 409}
+            return { message: "Already has master password" , status: 409}
         }
     
         const entry = await prisma.user_master_keys.create({
@@ -21,9 +22,11 @@ export const putUsersHashedPass = async (user_id: UUID ,master_key_hash: string,
                 created_at: new Date()
             }
         })
+
+        revalidatePath('/dashboard')
     
         return {
-            message: "Putting in DB successfully",
+            message: "Master Password Added Successfully!",
             userDetail: entry,
             status: 201
         }

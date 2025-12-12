@@ -14,6 +14,7 @@ import { Input } from "@/components/ui/input";
 import { Label } from "@/components/ui/label";
 import { hashMasterPassword } from "@/lib/crypto-utils";
 import { putUsersHashedPass } from "@/actions/enter-hashed-password";
+import { toast } from "sonner";
 
 type Props = {
   forceOpen: boolean;
@@ -42,7 +43,14 @@ export function EnterAndSaveMasterPassword({ forceOpen , userId }: Props) {
       //  CALL API ROUTE HERE
       const masterHash = await hashMasterPassword(masterPassword);
 
-      await putUsersHashedPass(userId,masterHash.hash,masterHash.salt);
+      const message = await putUsersHashedPass(userId,masterHash.hash,masterHash.salt);
+      
+      if (message.status == 201){
+          toast.success(message.message);
+      }
+      else {
+          toast.error(message.message)
+      }
 
       //  close ONLY after success
       setOpen(false);
