@@ -1,6 +1,7 @@
 import { AuthButton } from "./AuthButton";
+import { KeyCrypt } from "./KeyCrypt";
 
-export function NavBar( { isLoggedIn }:{ isLoggedIn: boolean} ) {
+export function NavBar() {
   return (
     <nav className="
       w-full
@@ -10,15 +11,14 @@ export function NavBar( { isLoggedIn }:{ isLoggedIn: boolean} ) {
       border border-white/20
       shadow-lg
       flex items-center
+      sticky
+      top-0
+      z-50
       h-16
     ">
       <div className="w-full max-w-5xl mx-auto flex justify-between px-10">
-        <div className="font-bold cursor-pointer text-3xl flex">
-        <span className="bg-linear-to-r text-3xl font-bold from-blue-700 to-cyan-500 bg-clip-text text-transparent">
-            KeyCrypt
-        </span>
-        </div>
-        <AuthButton isLoggedIn={isLoggedIn} />
+        <KeyCrypt />
+        <AuthButton/>
       </div>
     </nav>
   );

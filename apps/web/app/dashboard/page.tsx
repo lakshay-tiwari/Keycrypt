@@ -71,7 +71,6 @@ export default async function Dashboard(){
         </div>
     }
     return <div className="flex flex-col h-screen">
-        <NavBar isLoggedIn={isLoggedIn} />
         <ContentPage master_key_salt={master_key_salt} master_key_hash={master_key_hash} passwordArr={passwordArr}/>
         <EnterAndSaveMasterPassword forceOpen={!hasMasterPassword} userId={userId}/>
     </div>
