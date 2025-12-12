@@ -15,6 +15,7 @@ import { Input } from "@/components/ui/input";
 import { Label } from "@/components/ui/label";
 import { PasswordArrType } from "@/lib/types/PasswordArrType";
 import { decryptPassword } from "@/lib/crypto-utils";
+import { toast } from "sonner";
 
 export function ShowDecryptedPassword({
   masterPassword,
@@ -33,28 +34,41 @@ export function ShowDecryptedPassword({
   const [isCalculating, setIsCalculating] = useState(false);
   const [copied, setCopied] = useState(false);
 
-  useEffect(() => {
-    if (open) {
-      // Dialog OPENED
-      setIsCalculating(true);
-      setDecryptedPassword("");
-      setCopied(false);
+ useEffect(() => {
+  if (!open) {
+    // Dialog CLOSED
+    setDecryptedPassword("");
+    setCopied(false);
+    setIsCalculating(false);
+    return;
+  }
 
-      decryptPassword(password.password_cipher,
-        masterPassword,
-        password.password_iv,
-        master_key_salt
-      ).then((decrypted)=>{
-        console.log(decrypted)
-        setDecryptedPassword(decrypted);
-        setIsCalculating(false);
-      })
-    } else {
-      // Dialog CLOSED
-      setDecryptedPassword("");
-      setCopied(false);
+  // Dialog OPENED
+  setIsCalculating(true);
+  setDecryptedPassword("");
+  setCopied(false);
+
+  decryptPassword(
+    password.password_cipher,
+    masterPassword,
+    password.password_iv,
+    master_key_salt
+  )
+    .then((result) => {
       setIsCalculating(false);
-    }
+
+      if (!result.ok) {
+        toast.error("Wrong Master Password");
+        return;
+      }
+
+      setDecryptedPassword(result.value!);
+    })
+    .catch(() => {
+      // Should not happen unless something is truly wrong (network error)
+      setIsCalculating(false);
+      toast.error("Unexpected error occurred");
+    });
   }, [open]);
 
 

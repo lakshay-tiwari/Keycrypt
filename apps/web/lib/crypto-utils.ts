@@ -165,7 +165,7 @@ export async function decryptPassword(
   masterPassword: string,
   ivBase64: string,
   saltBase64: string
-): Promise<string> {
+): Promise<{ ok: boolean , value?:string}> {
   try {
     // 1. Decode base64 -> ArrayBuffer / Uint8Array
     const saltBuffer = base64ToArrayBuffer(saltBase64);
@@ -188,10 +188,9 @@ export async function decryptPassword(
     );
 
     // 4. Decode to string
-    return textDecoder.decode(decryptedBuffer);
+    return { ok: true, value: textDecoder.decode(decryptedBuffer) };
   } catch (error) {
-    console.error("decryptPassword failed:", error);
-    throw new Error("Decryption failed (wrong master password or corrupted data).");
+    return { ok: false};
   }
 }
 
@@ -227,7 +226,7 @@ async function demo() {
     encrypted.iv,
     salt
   );
-  console.log("Decrypted:", decrypted);
+  console.log("Decrypted:", decrypted.value);
 }
 
 demo();

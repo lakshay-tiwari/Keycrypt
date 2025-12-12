@@ -19,6 +19,7 @@ import { addPasswordToDB } from "@/actions/add-encrypted-password-db";
 import { encryptPassword, verifyMasterPassword } from "@/lib/crypto-utils";
 import { useUserId } from "@/hooks/useUserId";
 import { useRouter } from "next/navigation";
+import { Spinner } from "./ui/spinner";
 
 export function AddPasswordDialog({ master_key_salt , master_key_hash } : { master_key_salt: string , master_key_hash: string}) {
   const [open, setOpen] = useState(false);
@@ -39,9 +40,13 @@ export function AddPasswordDialog({ master_key_salt , master_key_hash } : { mast
   }
 
   if (loading){
-    return <div>Loading...</div>
+    return <div className="flex justify-center items-center h-screen">
+          <div className="flex items-center space-x-2">
+            <Spinner className="size-8" />
+            <span>Loading...</span>
+          </div>
+        </div>
   }
-
 
   async function handleSubmit(e: React.FormEvent) {
     e.preventDefault();

@@ -1,5 +1,4 @@
 import { ContentPage } from "@/components/ContentPage";
-import { NavBar } from "@/components/NavBar";
 import { createClient } from "@/lib/supabase/server"
 import { redirect } from "next/navigation";
 import { prisma } from "@repo/db/client"
@@ -7,11 +6,11 @@ import { EnterAndSaveMasterPassword } from "@/components/enter-masterpassword-di
 
 async function userDetailsfetch(){
     const supabase = await createClient();
-    const { data , error } = await supabase.auth.getClaims();
-    if (error || !data?.claims){
+    const { data , error } = await supabase.auth.getUser();
+    if (error || !data?.user){
         redirect("/auth/login");
     }
-    return data.claims;
+    return data.user;
 }
 
 
@@ -54,12 +53,11 @@ async function usersPasswordList(userId: string){
 
 export default async function Dashboard(){
     const userDetails = await userDetailsfetch();
-    const userId = userDetails.sub;
+    const userId = userDetails.id;
     const data = await getUserSecurityData(userId);
     if (data == null){
         return <div>Fetching...</div>
     }
-    const isLoggedIn = !!data
     const hasMasterPassword = !!data?.user_master_keys;
     const master_key_salt = data.user_master_keys?.master_key_salt || "";
     const master_key_hash = data.user_master_keys?.master_key_hash || "";

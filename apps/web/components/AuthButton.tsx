@@ -51,6 +51,9 @@ export function AuthButton() {
     }
 
     toast.success("Signed out successfully");
+
+    setLoading(false);
+    
     router.push("/");
   }
 
