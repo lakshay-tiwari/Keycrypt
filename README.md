@@ -115,11 +115,15 @@ Node.js (v18 or later recommended)
 pnpm (npm install -g pnpm)
 A supported database (PostgreSQL / SQLite / MySQL)
 
-### Clone the repository
+### Clone the repository 
+- SSH clone
 ```bash
-git clone <>
+git clone git@github.com:lakshay-tiwari/Keycrypt.git
 ```
-
+- HTTP Clone 
+```bash
+https://github.com/lakshay-tiwari/Keycrypt.git
+```
 ### Install dependencies
 ```bash
 pnpm install
