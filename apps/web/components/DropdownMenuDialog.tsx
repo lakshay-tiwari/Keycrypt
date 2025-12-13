@@ -22,8 +22,17 @@ import {
 import { Field, FieldGroup, FieldLabel } from "@/components/ui/field";
 import { Label } from "@/components/ui/label";
 import { PasswordInputWithEye } from "./PasswordInputWithEye";
+import { PasswordArrType } from "@/lib/types/PasswordArrType"
+import { deletePassword } from "@/actions/delete-password";
+import { encryptPassword, verifyMasterPassword } from "@/lib/crypto-utils";
+import { toast } from "sonner";
+import { editStoredPassword } from "@/actions/edit-password";
 
-export function DropdownMenuDialog() {
+export function DropdownMenuDialog({ passwordRecord , master_key_salt, master_key_hash }: { 
+  passwordRecord: PasswordArrType,
+  master_key_salt: string,
+  master_key_hash: string
+}) {
   // Dialog state
   const [showDeleteDialog, setShowDeleteDialog] = useState(false);
   const [showEditDialog, setShowEditDialog] = useState(false);
@@ -38,24 +47,84 @@ export function DropdownMenuDialog() {
   const input2Ref = useRef<HTMLInputElement>(null);
 
 
-  function handleDeleteSubmit() {
-    console.log("DELETE with master password:", deleteMasterPassword);
+  // state used to control the state of button so that we see loading
+  const [deleteButtonLoading, setDeleteButtonLoading] = useState(false);
+  const [editButtonLoading, setEditButtonLoading] = useState(false);
 
-    // reset + close
+
+  async function handleDeleteSubmit() {
+
+    if (deleteButtonLoading) return; // if one operation processing then to stop
+
+    setDeleteButtonLoading(true);
+    // verify master password
+    const verify = await verifyMasterPassword(deleteMasterPassword,master_key_hash,master_key_salt);
+
+    if (!verify){
+      toast.error("Master Password is Wrong")
+      setDeleteMasterPassword("")
+      setShowDeleteDialog(false)
+      setDeleteButtonLoading(false)
+      return;
+    } 
+
+    // Delete password from DB
+    const deleteStorePassword = await deletePassword(passwordRecord.id);
+
+    if (deleteStorePassword.status == 500){
+      toast.error("Server Error")
+      setDeleteMasterPassword("");
+      setShowDeleteDialog(false);
+      setDeleteButtonLoading(false);
+      return; 
+    }
+    
+    toast.success("Password Deleted Successfully!")
     setDeleteMasterPassword("");
     setShowDeleteDialog(false);
+    setDeleteButtonLoading(false);
+    return;
   }
 
-  function handleEditSubmit() {
-    console.log("EDIT with:", {
-      masterPassword: editMasterPassword,
-      newPassword,
-    });
+  async function handleEditSubmit() {
+    if(editButtonLoading){ // This is to prevent multiple clicks
+      return; 
+    }
+    setEditButtonLoading(true);
 
-    // reset + close
+    const verify = await verifyMasterPassword(editMasterPassword,master_key_hash,master_key_salt);
+
+    if (!verify){
+      toast.error("Master Password is wrong")
+      setEditMasterPassword("");
+      setNewPassword("");
+      setShowEditDialog(false);
+      setEditButtonLoading(false)
+      return;
+    }
+
+    const encryptPasswordBeforeStore = await encryptPassword(newPassword,editMasterPassword,master_key_salt);
+    
+    const editPasswordInDB = await editStoredPassword(passwordRecord.id,
+          encryptPasswordBeforeStore.cipherText,
+          encryptPasswordBeforeStore.iv
+    )
+
+    if (editPasswordInDB.status == 500){
+      toast.error("Server Error or SignIn again")
+      setEditMasterPassword("");
+      setNewPassword("");
+      setShowEditDialog(false);
+      setEditButtonLoading(false)
+      return;
+    }
+    
+    toast.success('Password Edited Successfully')
     setEditMasterPassword("");
     setNewPassword("");
     setShowEditDialog(false);
+    setEditButtonLoading(false)
+    return;
   }
 
   return (
@@ -95,9 +164,9 @@ export function DropdownMenuDialog() {
       <Dialog open={showDeleteDialog} onOpenChange={setShowDeleteDialog}>
         <DialogContent className="sm:max-w-[425px]">
           <form
-            onSubmit={(e) => {
+            onSubmit={async (e) => {
               e.preventDefault();
-              handleDeleteSubmit();
+              await handleDeleteSubmit();
             }}
           >
             <DialogHeader>
@@ -125,8 +194,8 @@ export function DropdownMenuDialog() {
                 </Button>
               </DialogClose>
 
-              <Button type="submit" variant="destructive">
-                Delete
+              <Button type="submit" className={deleteButtonLoading ? "cursor-default":"cursor-pointer"} variant="destructive">
+                { deleteButtonLoading ? "Processing..." :"Delete" }
               </Button>
             </DialogFooter>
           </form>
@@ -185,8 +254,8 @@ export function DropdownMenuDialog() {
                 </Button>
               </DialogClose>
 
-              <Button type="submit">
-                Save
+              <Button type="submit" className={editButtonLoading ? "cursor-default" : "cursor-pointer"}>
+                {editButtonLoading ? "Processing..." : "Save"}
               </Button>
             </DialogFooter>
           </form>
