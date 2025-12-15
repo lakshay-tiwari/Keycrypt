@@ -11,10 +11,10 @@ import {
   DialogTitle,
   DialogTrigger,
 } from "@/components/ui/dialog"
-import { Input } from "@/components/ui/input"
 import { Label } from "@/components/ui/label"
 import { ShowDecryptedPassword } from "./show-decrypted-password";
 import { PasswordArrType } from "@/lib/types/PasswordArrType";
+import { PasswordInputWithEye } from "./PasswordInputWithEye";
 
 export function ShowPasswordDialog({ password, master_key_salt } : { password: PasswordArrType, master_key_salt: string}) {
   const [masterPassword, setMasterPassword] = useState("");
@@ -45,9 +45,9 @@ export function ShowPasswordDialog({ password, master_key_salt } : { password: P
           <div className="grid gap-4">
             <div className="grid gap-3">
               <Label htmlFor="name-1">Master Password</Label>
-              <Input
+              <PasswordInputWithEye
                 id="name-1"
-                onChange={(e) => setMasterPassword(e.target.value)}
+                onChange={(e:React.ChangeEvent<HTMLInputElement>) => setMasterPassword(e.target.value)}
                 name="name"
                 defaultValue=""
               />

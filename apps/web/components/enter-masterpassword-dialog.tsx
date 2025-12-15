@@ -10,11 +10,11 @@ import {
   DialogHeader,
   DialogTitle,
 } from "@/components/ui/dialog";
-import { Input } from "@/components/ui/input";
 import { Label } from "@/components/ui/label";
 import { hashMasterPassword } from "@/lib/crypto-utils";
 import { putUsersHashedPass } from "@/actions/enter-hashed-password";
 import { toast } from "sonner";
+import { PasswordInputWithEye } from "./PasswordInputWithEye";
 
 type Props = {
   forceOpen: boolean;
@@ -86,11 +86,12 @@ export function EnterAndSaveMasterPassword({ forceOpen , userId }: Props) {
         <div className="grid gap-4">
           <div className="grid gap-2">
             <Label htmlFor="master-password">Master Password</Label>
-            <Input
+            <PasswordInputWithEye
               id="master-password"
               type="password"
               value={masterPassword}
-              onChange={(e) => setMasterPassword(e.target.value)}
+              autoComplete="new-password"
+              onChange={(e:React.ChangeEvent<HTMLInputElement>) => setMasterPassword(e.target.value)}
               disabled={saving}
             />
           </div>

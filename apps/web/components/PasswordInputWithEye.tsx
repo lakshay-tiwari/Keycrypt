@@ -5,7 +5,7 @@ import { EyeIcon } from "./EyeIcon";
 import { EyeOffIcon } from "./EyeOffIcon";
 import { Input } from "./ui/input";
 
-export function PasswordInputWithEye({
+export function PasswordInputWithEdye({
   ref,
   value,
   onChange,
@@ -44,3 +44,31 @@ export function PasswordInputWithEye({
     </div>
   );
 }
+
+
+export function PasswordInputWithEye({
+  ...props
+}) {
+  const [show, setShow] = useState(false);
+
+  return (
+    <div className="relative">
+      <Input
+        { ...props }
+        type={show ? "text" : "password"}
+        className="pr-10"
+        // autoComplete="new-password"
+      />
+
+      <button
+        type="button"
+        onClick={() => setShow(!show)}
+        className="absolute inset-y-0 right-2 flex items-center text-muted-foreground hover:text-foreground"
+        aria-label={show ? "Hide password" : "Show password"}
+      >
+        {show ? <EyeOffIcon /> : <EyeIcon />}
+      </button>
+    </div>
+  );
+}
+

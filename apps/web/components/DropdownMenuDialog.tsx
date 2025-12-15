@@ -1,6 +1,6 @@
 "use client";
 
-import { useRef, useState } from "react";
+import { ChangeEvent, useRef, useState } from "react";
 import { MoreVerticalIcon } from "lucide-react";
 import { Button } from "@/components/ui/button";
 import {
@@ -181,7 +181,8 @@ export function DropdownMenuDialog({ passwordRecord , master_key_salt, master_ke
                 <FieldLabel>Master Password</FieldLabel>
                 <PasswordInputWithEye
                   value={deleteMasterPassword}
-                  onChange={setDeleteMasterPassword}
+                  onChange={(e:ChangeEvent<HTMLInputElement>) => setDeleteMasterPassword(e.target.value)}
+                  autoComplete="new-password"
                   placeholder="Master password"
                 />
               </Field>
@@ -225,9 +226,10 @@ export function DropdownMenuDialog({ passwordRecord , master_key_salt, master_ke
                 <Label>Master Password</Label>
                 <PasswordInputWithEye
                   value={editMasterPassword}
-                  onChange={setEditMasterPassword}
+                  onChange={(e:ChangeEvent<HTMLInputElement>) => setEditMasterPassword(e.target.value)}
                   placeholder="Master password"
-                  onKeyDown={(e)=>{
+                  autoComplete="new-password"
+                  onKeyDown={(e: React.KeyboardEvent<HTMLInputElement> )=>{
                     if (e.key == 'Enter'){
                       e.preventDefault();
                       input2Ref.current?.focus();
@@ -241,7 +243,8 @@ export function DropdownMenuDialog({ passwordRecord , master_key_salt, master_ke
                 <PasswordInputWithEye
                   value={newPassword}
                   ref={input2Ref}
-                  onChange={setNewPassword}
+                  autoComplete="new-password"
+                  onChange={(e:ChangeEvent<HTMLInputElement>) => setNewPassword(e.target.value)}
                   placeholder="New password"
                 />
               </Field>

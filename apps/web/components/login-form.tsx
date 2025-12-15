@@ -15,6 +15,7 @@ import { Label } from "@/components/ui/label";
 import Link from "next/link";
 import { useRouter } from "next/navigation";
 import { useState } from "react";
+import { PasswordInputWithEye } from "./PasswordInputWithEye";
 
 export function LoginForm({
   className,
@@ -80,12 +81,13 @@ export function LoginForm({
                     Forgot your password?
                   </Link> */}
                 </div>
-                <Input
+                <PasswordInputWithEye
                   id="password"
                   type="password"
+                  autoComplete="current-password"
                   required
                   value={password}
-                  onChange={(e) => setPassword(e.target.value)}
+                  onChange={(e:React.ChangeEvent<HTMLInputElement>) => setPassword(e.target.value)}
                 />
               </div>
               {error && <p className="text-sm text-red-500">{error}</p>}

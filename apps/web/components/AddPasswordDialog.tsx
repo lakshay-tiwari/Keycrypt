@@ -20,6 +20,7 @@ import { encryptPassword, verifyMasterPassword } from "@/lib/crypto-utils";
 import { useUserId } from "@/hooks/useUserId";
 import { useRouter } from "next/navigation";
 import { Spinner } from "./ui/spinner";
+import { PasswordInputWithEye } from "./PasswordInputWithEye";
 
 export function AddPasswordDialog({ master_key_salt , master_key_hash } : { master_key_salt: string , master_key_hash: string}) {
   const [open, setOpen] = useState(false);
@@ -113,22 +114,22 @@ export function AddPasswordDialog({ master_key_salt , master_key_hash } : { mast
 
             <div className="grid gap-2">
               <Label htmlFor="master">Master Password</Label>
-              <Input
+              <PasswordInputWithEye
                 id="master"
                 type="password"
                 value={masterPassword}
-                onChange={(e) => setMasterPassword(e.target.value)}
+                onChange={(e:React.ChangeEvent<HTMLInputElement>) => setMasterPassword(e.target.value)}
                 required
               />
             </div>
 
             <div className="grid gap-2">
               <Label htmlFor="password">Password</Label>
-              <Input
+              <PasswordInputWithEye
                 id="password"
                 type="password"
                 value={password}
-                onChange={(e) => setPassword(e.target.value)}
+                onChange={(e:React.ChangeEvent<HTMLInputElement>) => setPassword(e.target.value)}
                 required
               />
             </div>
