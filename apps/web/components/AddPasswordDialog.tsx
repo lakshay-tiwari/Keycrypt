@@ -19,65 +19,78 @@ import { addPasswordToDB } from "@/actions/add-encrypted-password-db";
 import { encryptPassword, verifyMasterPassword } from "@/lib/crypto-utils";
 import { useUserId } from "@/hooks/useUserId";
 import { useRouter } from "next/navigation";
-import { Spinner } from "./ui/spinner";
 import { PasswordInputWithEye } from "./PasswordInputWithEye";
 
-export function AddPasswordDialog({ master_key_salt , master_key_hash } : { master_key_salt: string , master_key_hash: string}) {
+export function AddPasswordDialog({
+  master_key_salt,
+  master_key_hash,
+}: {
+  master_key_salt: string;
+  master_key_hash: string;
+}) {
   const [open, setOpen] = useState(false);
   const [masterPassword, setMasterPassword] = useState("");
   const [title, setTitle] = useState("");
   const [password, setPassword] = useState("");
-  const { userId , loading } = useUserId();
-  const router = useRouter()
-  
-  useEffect(()=>{
-    if (!loading && userId == null){
-      router.push("/auth/login")
+  const [isSubmitting, setIsSubmitting] = useState(false);
+
+  const { userId, loading } = useUserId();
+  const router = useRouter();
+
+  useEffect(() => {
+    if (!loading && userId == null) {
+      router.push("/auth/login");
     }
-  },[loading,userId,router])
+  }, [loading, userId, router]);
 
-  if (!loading && userId == null){ // upper one push it, before pushing it show redirectin...
-    return <div>Redirecting...</div>
-  }
-
-  if (loading){
-    return <div className="flex justify-center items-center h-screen">
-          <div className="flex items-center space-x-2">
-            <Spinner className="size-8" />
-            <span>Loading...</span>
-          </div>
-        </div>
-  }
+  if (!userId) return null;
 
   async function handleSubmit(e: React.FormEvent) {
     e.preventDefault();
+    if (isSubmitting) return;
+
+    if (!userId) {
+      toast.error("User not authenticated");
+      return;
+    }
+
+    setIsSubmitting(true);
 
     try {
-      // simulate API / DB save
-      const verifyPassword = await verifyMasterPassword(masterPassword,master_key_hash,master_key_salt);
-      if (!verifyPassword){
-          toast.error("Invalid Master Password")
-          return;
+      const verifyPassword = await verifyMasterPassword(
+        masterPassword,
+        master_key_hash,
+        master_key_salt
+      );
+
+      if (!verifyPassword) {
+        toast.error("Invalid Master Password");
+        return;
       }
-      const encryptedPassword = await encryptPassword(password,masterPassword,master_key_salt);
-      console.log(encryptedPassword)
-      const data = {
-          userId: userId!,
-          label: title,
-          password_cipher: encryptedPassword.cipherText,
-          password_iv: encryptedPassword.iv
-      }
-      await addPasswordToDB(data)
+
+      const encryptedPassword = await encryptPassword(
+        password,
+        masterPassword,
+        master_key_salt
+      );
+
+      await addPasswordToDB({
+        userId, // ✅ safe, narrowed
+        label: title,
+        password_cipher: encryptedPassword.cipherText,
+        password_iv: encryptedPassword.iv,
+      });
 
       toast.success("Password added successfully");
 
-      // reset + close
       setMasterPassword("");
       setTitle("");
       setPassword("");
       setOpen(false);
-    } catch (error) {
+    } catch {
       toast.error("Failed to add password");
+    } finally {
+      setIsSubmitting(false);
     }
   }
 
@@ -87,6 +100,7 @@ export function AddPasswordDialog({ master_key_salt , master_key_hash } : { mast
         <Button
           size="icon"
           className="fixed bottom-6 right-6 w-14 h-14 rounded-full shadow-lg"
+          disabled={isSubmitting}
         >
           <Plus className="w-7 h-7" />
         </Button>
@@ -118,7 +132,9 @@ export function AddPasswordDialog({ master_key_salt , master_key_hash } : { mast
                 id="master"
                 type="password"
                 value={masterPassword}
-                onChange={(e:React.ChangeEvent<HTMLInputElement>) => setMasterPassword(e.target.value)}
+                onChange={(e:React.ChangeEvent<HTMLInputElement>) =>
+                  setMasterPassword(e.target.value)
+                }
                 required
               />
             </div>
@@ -129,14 +145,18 @@ export function AddPasswordDialog({ master_key_salt , master_key_hash } : { mast
                 id="password"
                 type="password"
                 value={password}
-                onChange={(e:React.ChangeEvent<HTMLInputElement>) => setPassword(e.target.value)}
+                onChange={(e:React.ChangeEvent<HTMLInputElement>) =>
+                  setPassword(e.target.value)
+                }
                 required
               />
             </div>
           </div>
 
           <DialogFooter>
-            <Button type="submit">Save</Button>
+            <Button type="submit" disabled={isSubmitting} className="cursor-pointer">
+              {isSubmitting ? "Saving..." : "Save"}
+            </Button>
           </DialogFooter>
         </form>
       </DialogContent>

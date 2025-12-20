@@ -1,5 +1,4 @@
 import { Hero } from "@/components/Hero";
-import { NavBar } from "@/components/NavBar";
 import { createClient } from "@/lib/supabase/server";
 import { redirect } from "next/navigation";
 

@@ -136,7 +136,7 @@ export function DropdownMenuDialog({ passwordRecord , master_key_salt, master_ke
             variant="outline"
             size="icon-sm"
             aria-label="Open menu"
-            className="bg-slate-300 hover:bg-amber-100"
+            className="bg-sky-300 hover:bg-blue-100"
           >
             <MoreVerticalIcon />
           </Button>

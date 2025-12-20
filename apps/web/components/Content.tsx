@@ -11,7 +11,7 @@ export function Content({ passwordArr , master_key_salt , master_key_hash } : {
     master_key_hash: string
 }){
 
-    return <div className="md:mx-30 mx-8 pb-2">
+    return <div className="pb-2 px-4 mx-auto max-w-3xl">
         {passwordArr.map(password => {
             return <ContentShow master_key_salt={master_key_salt} master_key_hash={master_key_hash} key={password.id} password={password} />
         })}
@@ -23,8 +23,8 @@ function ContentShow({ password, master_key_salt , master_key_hash }: {
     master_key_salt: string,
     master_key_hash: string
 }){
-    return <div className="flex justify-between items-center bg-amber-200 mt-2 px-1 h-16">
-        <p className="sm:text-lg text-sm font-semibold">{password.label}</p>
+    return <div className="flex justify-between items-center bg-cyan-50 border border-cyan-300 mt-3 px-4 h-16 rounded-xl shadow-sm hover:shadow-md transition">
+        <p className="sm:text-lg text-slate-800 text-sm font-semibold">{password.label}</p>
         <div className="flex items-center space-x-2">
             <ShowPasswordDialog master_key_salt={master_key_salt} password={password} />
             <DropdownMenuDialog master_key_hash={master_key_hash} master_key_salt={master_key_salt}  passwordRecord={password}  / >
