@@ -16,6 +16,8 @@ import Link from "next/link";
 import { useRouter } from "next/navigation";
 import { useState } from "react";
 import { PasswordInputWithEye } from "./PasswordInputWithEye";
+import { toast } from "sonner";
+
 
 export function LoginForm({
   className,
@@ -25,6 +27,7 @@ export function LoginForm({
   const [password, setPassword] = useState("");
   const [error, setError] = useState<string | null>(null);
   const [isLoading, setIsLoading] = useState(false);
+  const [isResetting, setIsResetting] = useState(false)
   const router = useRouter();
 
   const handleLogin = async (e: React.FormEvent) => {
@@ -32,6 +35,12 @@ export function LoginForm({
     const supabase = createClient();
     setIsLoading(true);
     setError(null);
+
+    if (!password.trim()){
+      toast.error("Enter password");
+      setIsLoading(false)
+      return;
+    }
 
     try {
       const { error } = await supabase.auth.signInWithPassword({
@@ -47,6 +56,31 @@ export function LoginForm({
       setIsLoading(false);
     }
   };
+
+  const handleForgetPassword = async(e:React.MouseEvent<HTMLButtonElement>) => {
+    e.preventDefault();
+    if (!email){
+      toast.error("Enter Email")
+      return;
+    }
+    setIsResetting(true)
+    const supabase = createClient()
+    
+    const { error } = await supabase.auth.resetPasswordForEmail(email,{
+      redirectTo: `${window.location.origin}/auth/update-password`,
+    })
+    setIsResetting(false)
+    setEmail('')
+
+    if (error) {
+      console.error(error)
+      toast.error("Something went wrong. Try again.")
+    } else {
+      toast.success(
+        "If an account with this email exists, you’ll receive a reset link."
+      )
+    }
+  }
 
   return (
     <div className={cn("flex flex-col gap-6", className)} {...props}>
@@ -74,24 +108,26 @@ export function LoginForm({
               <div className="grid gap-2">
                 <div className="flex items-center">
                   <Label htmlFor="password">Password</Label>
-                  {/* <Link
-                    href="/auth/forgot-password"
-                    className="ml-auto inline-block text-sm underline-offset-4 hover:underline"
+                  <button
+                    type="button"
+                    className="ml-auto text-sm text-muted-foreground hover:underline cursor-pointer"
+                    disabled={isResetting}
+                    onClick={handleForgetPassword}
                   >
-                    Forgot your password?
-                  </Link> */}
+                    {isResetting? "Sending..." : "Forgot password?"}
+                  </button>
+
                 </div>
                 <PasswordInputWithEye
                   id="password"
                   type="password"
                   autoComplete="current-password"
-                  required
                   value={password}
                   onChange={(e:React.ChangeEvent<HTMLInputElement>) => setPassword(e.target.value)}
                 />
               </div>
               {error && <p className="text-sm text-red-500">{error}</p>}
-              <Button type="submit" className="w-full" disabled={isLoading}>
+              <Button type="submit" className="w-full" disabled={isLoading || isResetting}>
                 {isLoading ? "Logging in..." : "Login"}
               </Button>
             </div>
