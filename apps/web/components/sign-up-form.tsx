@@ -45,12 +45,13 @@ export function SignUpForm({
         email,
         password,
         options: {
-          emailRedirectTo: `${window.location.origin}/auth/login`,
+          emailRedirectTo: `${window.location.origin}/dashboard`,
         },
       });
       if (error) throw error;
       router.push("/auth/sign-up-success");
     } catch (error: unknown) {
+      console.log(error)
       setError(error instanceof Error ? error.message : "An error occurred");
     } finally {
       setIsLoading(false);
