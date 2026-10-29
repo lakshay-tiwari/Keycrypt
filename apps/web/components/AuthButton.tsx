@@ -63,16 +63,17 @@ export function AuthButton() {
         onClick={onClickHandle}
         disabled={loading}
         className="
-          px-5 sm:px-6 py-2
+          px-6 py-2
           rounded-full
-          font-bold
+          font-medium
           text-white
-          bg-linear-to-r from-blue-600 to-cyan-500
-          shadow-md shadow-blue-900/20
-          hover:shadow-lg hover:from-blue-700 hover:to-cyan-600
+          bg-[#008be3]
+          hover:bg-[#0079c7]
           active:scale-95
           transition-all duration-200 ease-out
           cursor-pointer
+          shadow-xs
+          text-sm sm:text-base
           disabled:opacity-50 disabled:cursor-not-allowed
         "
       >

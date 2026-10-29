@@ -1,55 +1,71 @@
-"use client"
+"use client";
 
-import { useRouter } from "next/navigation"
+import { useRouter } from "next/navigation";
+import { VaultCard } from "./VaultCard";
 
-export function Hero(){
-    const router = useRouter();
+export function Hero() {
+  const router = useRouter();
 
-    function navigateToDashboard(){
-        router.push('/dashboard')
+  function handleGetStarted() {
+    router.push("/auth/sign-up");
+  }
+
+  function handleSeeHowItWorks() {
+    const section = document.getElementById("how-it-works");
+    if (section) {
+      section.scrollIntoView({ behavior: "smooth" });
     }
+  }
 
-    return (
-        <div className="w-full flex justify-center px-4 
-                        mt-52 sm:mt-44 md:mt-40 lg:mt-32">
-            <div className="text-center max-w-2xl">
-
-                <h1 className="font-semibold font-serif text-blue-900 leading-tight
-                               text-3xl sm:text-4xl md:text-5xl max-[360px]:text-2xl">
-                    Never Lose a Password
-                </h1>
-
-                <p className="flex justify-center items-center space-x-2 mt-2
-                              font-semibold font-serif text-blue-900 leading-tight
-                              text-3xl sm:text-4xl md:text-5xl max-[360px]:text-2xl">
-                    <span>Again with</span>
-
-                    <span className="animate-fade-in font-bold bg-clip-text text-transparent 
-                                     bg-linear-to-r from-blue-700 to-cyan-500">
-                        KeyCrypt
-                    </span>
-                </p>
-
-                <div className="mt-4 text-cyan-500 leading-snug
-                                text-sm sm:text-base md:text-lg max-[360px]:text-[10px] px-2">
-                    <p>Stop resetting forgotten passwords.</p>
-                    <p>Keep everything safe, synced, and easy to access.</p>
-                    <p>KeyCrypt handles the security — you enjoy the convenience.</p>
-                </div>
-
-                <div className="mt-8">
-                    <button 
-                        className="bg-cyan-400 cursor-pointer rounded-3xl 
-                                   text-base sm:text-lg px-6 sm:px-8 py-2 
-                                   font-semibold text-blue-950 shadow-sm 
-                                   hover:bg-cyan-300 transition-all duration-200"
-                        onClick={navigateToDashboard}
-                    >
-                        Get Started
-                    </button>
-                </div>
-
+  return (
+    <section className="relative w-full overflow-hidden">
+      <div className="max-w-6xl mx-auto px-6 sm:px-8 pt-8 pb-20 md:pt-12 md:pb-28">
+        <div className="grid grid-cols-1 lg:grid-cols-12 gap-12 lg:gap-8 items-center">
+          {/* Left Column: Text & CTA */}
+          <div className="lg:col-span-7 flex flex-col items-start text-left">
+            {/* Pill Tag */}
+            <div className="inline-flex items-center gap-2 px-4 py-1.5 rounded-full border border-sky-300/80 bg-white/60 backdrop-blur-xs text-[#0284c7] font-medium text-xs sm:text-sm shadow-xs mb-6">
+              Your passwords, always within reach
             </div>
+
+            {/* Main Headline */}
+            <h1 className="font-serif font-bold text-[#0c2340] text-4xl sm:text-5xl lg:text-[62px] leading-[1.12] tracking-tight">
+              Never lose a<br />
+              password again<br />
+              with <span className="text-[#008be3]">KeyCrypt</span>
+            </h1>
+
+            {/* Subtitle / Description */}
+            <p className="mt-6 text-[#47667b] text-base sm:text-lg leading-relaxed max-w-xl">
+              Stop resetting forgotten passwords. Keep everything safe, synced, and easy to access. KeyCrypt handles the security — you enjoy the convenience.
+            </p>
+
+            {/* Buttons */}
+            <div className="mt-8 flex flex-wrap items-center gap-4">
+              <button
+                type="button"
+                onClick={handleGetStarted}
+                className="px-7 py-3 rounded-full font-semibold text-base text-[#08203e] bg-[#00c2f3] hover:bg-[#00b2e0] active:scale-95 transition-all duration-200 shadow-xs cursor-pointer"
+              >
+                Get Started
+              </button>
+
+              <button
+                type="button"
+                onClick={handleSeeHowItWorks}
+                className="px-7 py-3 rounded-full font-semibold text-base text-[#0c2340] border border-[#0c2340]/60 hover:border-[#0c2340] hover:bg-white/40 active:scale-95 transition-all duration-200 cursor-pointer"
+              >
+                See how it works
+              </button>
+            </div>
+          </div>
+
+          {/* Right Column: Vault Preview Card */}
+          <div className="lg:col-span-5 flex justify-center lg:justify-end">
+            <VaultCard />
+          </div>
         </div>
-    )
+      </div>
+    </section>
+  );
 }

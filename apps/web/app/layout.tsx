@@ -1,4 +1,5 @@
 import type { Metadata } from "next";
+import { Lora } from "next/font/google";
 import localFont from "next/font/local";
 import "./globals.css";
 import { Toaster } from "sonner";
@@ -12,10 +13,15 @@ const geistMono = localFont({
   src: "./fonts/GeistMonoVF.woff",
   variable: "--font-geist-mono",
 });
+const lora = Lora({
+  subsets: ["latin"],
+  variable: "--font-serif",
+  display: "swap",
+});
 
 export const metadata: Metadata = {
-  title: "KeyCrypt",
-  description: "App to Store your secret",
+  title: "KeyCrypt - Never lose a password again",
+  description: "Keep everything safe, synced, and easy to access with KeyCrypt.",
 };
 
 export default function RootLayout({
@@ -24,8 +30,11 @@ export default function RootLayout({
   children: React.ReactNode;
 }>) {
   return (
-    <html lang="en">
-      <body className={`${geistSans.variable} ${geistMono.variable} bg-cyan-100`}>
+    <html lang="en" className="scroll-smooth" suppressHydrationWarning>
+      <body
+        className={`${geistSans.variable} ${geistMono.variable} ${lora.variable} bg-[#e0f3fc] text-slate-800 antialiased`}
+        suppressHydrationWarning
+      >
         <NavBar />
         {children}
         <Toaster richColors position="top-right" />

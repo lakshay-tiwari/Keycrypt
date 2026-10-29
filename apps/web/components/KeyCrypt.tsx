@@ -2,17 +2,19 @@
 
 import { useRouter } from "next/navigation";
 
-export function KeyCrypt(){
-    const router = useRouter();
+export function KeyCrypt({ className = "" }: { className?: string }) {
+  const router = useRouter();
 
-    function handleonClick(){
-        router.push('/');
-        return;
-    }
-    
-    return <div className="font-bold cursor-pointer text-3xl flex" onClick={handleonClick}>
-        <span className="bg-linear-to-r text-3xl font-bold from-blue-700 to-cyan-500 bg-clip-text text-transparent">
-            KeyCrypt
-        </span>
+  function handleOnClick() {
+    router.push("/");
+  }
+
+  return (
+    <div
+      className={`font-bold cursor-pointer tracking-tight text-[#008be3] hover:opacity-90 transition-opacity select-none ${className}`}
+      onClick={handleOnClick}
+    >
+      KeyCrypt
     </div>
+  );
 }
