@@ -4,6 +4,7 @@ import { useState } from "react";
 import { EyeIcon } from "./EyeIcon";
 import { EyeOffIcon } from "./EyeOffIcon";
 import { Input } from "./ui/input";
+import { cn } from "@/lib/utils";
 
 export function PasswordInputWithEdye({
   ref,
@@ -47,26 +48,26 @@ export function PasswordInputWithEdye({
 
 
 export function PasswordInputWithEye({
+  className,
   ...props
-}) {
+}: React.ComponentProps<"input">) {
   const [show, setShow] = useState(false);
 
   return (
-    <div className="relative">
+    <div className="relative w-full">
       <Input
-        { ...props }
+        {...props}
         type={show ? "text" : "password"}
-        className="pr-10"
-        // autoComplete="new-password"
+        className={cn("pr-11", className)}
       />
 
       <button
         type="button"
         onClick={() => setShow(!show)}
-        className="absolute inset-y-0 right-2 flex items-center text-muted-foreground hover:text-foreground"
+        className="absolute inset-y-0 right-3.5 flex items-center text-slate-500 hover:text-slate-800 transition-colors cursor-pointer"
         aria-label={show ? "Hide password" : "Show password"}
       >
-        {show ? <EyeOffIcon /> : <EyeIcon />}
+        {show ? <EyeOffIcon className="w-5 h-5" /> : <EyeIcon className="w-5 h-5" />}
       </button>
     </div>
   );

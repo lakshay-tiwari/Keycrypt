@@ -97,13 +97,14 @@ export function AddPasswordDialog({
   return (
     <Dialog open={open} onOpenChange={setOpen}>
       <DialogTrigger asChild>
-        <Button
-          size="icon"
-          className="fixed bottom-6 right-6 w-14 h-14 rounded-full shadow-lg"
+        <button
+          type="button"
+          aria-label="Add new password"
+          className="fixed bottom-8 right-8 sm:bottom-10 sm:right-10 z-40 w-14 h-14 rounded-full bg-[#0c1f38] hover:bg-[#183254] text-white flex items-center justify-center shadow-xl shadow-slate-950/25 hover:scale-105 active:scale-95 transition-all duration-200 cursor-pointer disabled:opacity-50 disabled:cursor-not-allowed"
           disabled={isSubmitting}
         >
-          <Plus className="w-7 h-7" />
-        </Button>
+          <Plus className="w-7 h-7 stroke-[2.5]" />
+        </button>
       </DialogTrigger>
 
       <DialogContent className="sm:max-w-[425px]">
@@ -115,48 +116,62 @@ export function AddPasswordDialog({
             </DialogDescription>
           </DialogHeader>
 
-          <div className="grid gap-4 py-4">
+          <div className="grid gap-4 py-3">
             <div className="grid gap-2">
-              <Label htmlFor="title">Title</Label>
+              <Label htmlFor="title" className="text-sm font-semibold text-[#0c1f38]">
+                Title
+              </Label>
               <Input
                 id="title"
                 value={title}
                 onChange={(e) => setTitle(e.target.value)}
                 required
+                className="h-11 rounded-xl border border-sky-200 focus:border-sky-500"
+                placeholder="e.g. Gmail (personal)"
               />
             </div>
 
             <div className="grid gap-2">
-              <Label htmlFor="master">Master Password</Label>
+              <Label htmlFor="master" className="text-sm font-semibold text-[#0c1f38]">
+                Master Password
+              </Label>
               <PasswordInputWithEye
                 id="master"
                 type="password"
                 value={masterPassword}
-                onChange={(e:React.ChangeEvent<HTMLInputElement>) =>
+                onChange={(e: React.ChangeEvent<HTMLInputElement>) =>
                   setMasterPassword(e.target.value)
                 }
                 required
+                className="h-11 rounded-xl border border-sky-200 focus:border-sky-500"
               />
             </div>
 
             <div className="grid gap-2">
-              <Label htmlFor="password">Password</Label>
+              <Label htmlFor="password" className="text-sm font-semibold text-[#0c1f38]">
+                Password
+              </Label>
               <PasswordInputWithEye
                 id="password"
                 type="password"
                 value={password}
-                onChange={(e:React.ChangeEvent<HTMLInputElement>) =>
+                onChange={(e: React.ChangeEvent<HTMLInputElement>) =>
                   setPassword(e.target.value)
                 }
                 required
+                className="h-11 rounded-xl border border-sky-200 focus:border-sky-500"
               />
             </div>
           </div>
 
-          <DialogFooter>
-            <Button type="submit" disabled={isSubmitting} className="cursor-pointer">
+          <DialogFooter className="mt-2">
+            <button
+              type="submit"
+              disabled={isSubmitting}
+              className="px-6 py-2.5 rounded-xl bg-[#0c1f38] hover:bg-[#183254] text-white font-semibold text-sm sm:text-base shadow-xs cursor-pointer active:scale-95 transition-all disabled:opacity-50"
+            >
               {isSubmitting ? "Saving..." : "Save"}
-            </Button>
+            </button>
           </DialogFooter>
         </form>
       </DialogContent>

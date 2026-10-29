@@ -132,14 +132,13 @@ export function DropdownMenuDialog({ passwordRecord , master_key_salt, master_ke
       {/* Dropdown */}
       <DropdownMenu>
         <DropdownMenuTrigger asChild>
-          <Button
-            variant="outline"
-            size="icon-sm"
+          <button
+            type="button"
             aria-label="Open menu"
-            className="bg-sky-300 hover:bg-blue-100"
+            className="w-8 h-8 sm:w-8.5 sm:h-8.5 rounded-xl bg-[#bde8fb] hover:bg-[#aee0f8] text-[#0c1f38] flex items-center justify-center cursor-pointer active:scale-95 transition-all duration-150 shrink-0"
           >
-            <MoreVerticalIcon />
-          </Button>
+            <MoreVerticalIcon className="w-4 h-4 text-[#0c1f38]" />
+          </button>
         </DropdownMenuTrigger>
 
         <DropdownMenuContent align="end" className="w-40">

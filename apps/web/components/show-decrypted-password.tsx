@@ -84,50 +84,59 @@ export function ShowDecryptedPassword({
 
   return (
     <Dialog open={open} onOpenChange={onOpenChange}>
-      <DialogContent className="sm:max-w-[425px]">
+      <DialogContent className="sm:max-w-[480px]">
         <DialogHeader>
-          <DialogTitle>Your Password</DialogTitle>
-          <DialogDescription>
+          <DialogTitle className="text-2xl font-bold text-[#0c1f38] tracking-tight">
+            Your Password
+          </DialogTitle>
+          <DialogDescription className="text-slate-500 text-sm sm:text-base">
             Here is your decrypted password
           </DialogDescription>
         </DialogHeader>
 
-        <div className="grid gap-4">
-          <div className="grid gap-2">
-            <Label htmlFor="password">Decrypted Password</Label>
+        <div className="py-2">
+          <Label htmlFor="password" className="text-sm font-semibold text-[#0c1f38] mb-2 block">
+            Decrypted Password
+          </Label>
 
-            {isCalculating ? (
-              <div className="text-sm text-muted-foreground py-2">
-                Decrypting password…
-              </div>
-            ) : (
-              <div className="relative">
-                <Input
-                  id="password"
-                  value={decryptedPassword}
-                  readOnly
-                  className="pr-10"
-                />
+          {isCalculating ? (
+            <div className="text-sm text-sky-700 py-3 flex items-center gap-2">
+              <span className="w-4 h-4 border-2 border-sky-500 border-t-transparent rounded-full animate-spin" />
+              Decrypting password…
+            </div>
+          ) : (
+            <div className="relative">
+              <Input
+                id="password"
+                value={decryptedPassword}
+                readOnly
+                className="h-12 rounded-2xl border-2 border-sky-300/90 font-mono text-base px-4 pr-11 text-slate-800 bg-sky-50/40 select-all"
+              />
 
-                {/* Copy Button */}
-                <button
-                  type="button"
-                  onClick={handleCopy}
-                  disabled={!decryptedPassword}
-                  className="absolute inset-y-0 right-2 flex items-center text-muted-foreground hover:text-foreground"
-                >
-                  {copied ? <CheckIcon /> : <CopyIcon />}
-                </button>
-              </div>
-            )}
-          </div>
+              {/* Copy Button */}
+              <button
+                type="button"
+                onClick={handleCopy}
+                disabled={!decryptedPassword}
+                className="absolute inset-y-0 right-3.5 flex items-center text-slate-500 hover:text-[#008be3] transition-colors cursor-pointer"
+                title={copied ? "Copied!" : "Copy password"}
+                aria-label={copied ? "Copied!" : "Copy password"}
+              >
+                {copied ? <CheckIcon /> : <CopyIcon />}
+              </button>
+            </div>
+          )}
         </div>
 
-        <DialogFooter>
+        <DialogFooter className="mt-4">
           <DialogClose asChild>
-            <Button variant="outline" disabled={isCalculating}>
+            <button
+              type="button"
+              disabled={isCalculating}
+              className="px-6 py-2.5 rounded-xl bg-[#0c1f38] hover:bg-[#183254] text-white font-semibold text-sm sm:text-base shadow-xs cursor-pointer active:scale-95 transition-all"
+            >
               Close
-            </Button>
+            </button>
           </DialogClose>
         </DialogFooter>
       </DialogContent>

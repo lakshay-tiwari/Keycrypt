@@ -25,51 +25,60 @@ export function ShowPasswordDialog({ password, master_key_salt } : { password: P
     <>
       <Dialog open={open} onOpenChange={setOpen}>
         <DialogTrigger asChild>
-          <Button
-            variant="default"
-            className="cursor-pointer"
+          <button
+            type="button"
+            className="bg-[#0c1f38] hover:bg-[#183254] text-white text-xs sm:text-sm font-semibold rounded-full px-4 sm:px-5 py-1.5 shadow-xs cursor-pointer active:scale-95 transition-all duration-150 shrink-0"
             onClick={() => setOpen(true)}
           >
             Show
-          </Button>
+          </button>
         </DialogTrigger>
 
-        <DialogContent className="sm:max-w-[425px]">
+        <DialogContent className="sm:max-w-[480px]">
           <DialogHeader>
-            <DialogTitle>Your Password</DialogTitle>
-            <DialogDescription>
-              Enter Your Master Password to Decrypt
+            <DialogTitle className="text-2xl font-bold text-[#0c1f38] tracking-tight">
+              Your Password
+            </DialogTitle>
+            <DialogDescription className="text-slate-500 text-sm sm:text-base">
+              Enter your master password to decrypt.
             </DialogDescription>
           </DialogHeader>
 
-          <div className="grid gap-4">
-            <div className="grid gap-3">
-              <Label htmlFor="name-1">Master Password</Label>
-              <PasswordInputWithEye
-                id="name-1"
-                onChange={(e:React.ChangeEvent<HTMLInputElement>) => setMasterPassword(e.target.value)}
-                name="name"
-                defaultValue=""
-              />
-            </div>
+          <div className="py-2">
+            <Label htmlFor="name-1" className="text-sm font-semibold text-[#0c1f38] mb-2 block">
+              Master Password
+            </Label>
+            <PasswordInputWithEye
+              id="name-1"
+              onChange={(e: React.ChangeEvent<HTMLInputElement>) =>
+                setMasterPassword(e.target.value)
+              }
+              name="name"
+              defaultValue=""
+              className="h-12 rounded-2xl border-2 border-sky-300/90 focus:border-sky-500 focus:ring-4 focus:ring-sky-100 text-base px-4 text-slate-800"
+            />
           </div>
 
-          <DialogFooter>
+          <DialogFooter className="mt-4 flex flex-row justify-end gap-3">
             <DialogClose asChild>
-              <Button variant="outline">Cancel</Button>
+              <button
+                type="button"
+                className="px-6 py-2.5 rounded-xl border border-slate-300/80 bg-white hover:bg-slate-50 text-slate-700 font-semibold text-sm sm:text-base cursor-pointer active:scale-95 transition-all"
+              >
+                Cancel
+              </button>
             </DialogClose>
 
-            {/* when opening second dialog, close this one */}
-            <Button
-              variant="default"
-              className="cursor-pointer"
+            <button
+              type="button"
+              className="px-6 py-2.5 rounded-xl bg-[#0c1f38] hover:bg-[#183254] text-white font-semibold text-sm sm:text-base shadow-xs cursor-pointer active:scale-95 transition-all"
               onClick={() => {
-                setOpen(false);        
-                setShowDecrypted(true); 
+                setOpen(false);
+                setShowDecrypted(true);
               }}
             >
               Show Password
-            </Button>
+            </button>
           </DialogFooter>
         </DialogContent>
       </Dialog>

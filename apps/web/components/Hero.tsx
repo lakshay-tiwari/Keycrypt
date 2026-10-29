@@ -7,7 +7,7 @@ export function Hero() {
   const router = useRouter();
 
   function handleGetStarted() {
-    router.push("/auth/sign-up");
+    router.push("/dashboard");
   }
 
   function handleSeeHowItWorks() {

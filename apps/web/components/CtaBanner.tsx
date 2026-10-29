@@ -6,7 +6,7 @@ export function CtaBanner() {
   const router = useRouter();
 
   function handleGetStarted() {
-    router.push("/auth/sign-up");
+    router.push("/dashboard");
   }
 
   return (
